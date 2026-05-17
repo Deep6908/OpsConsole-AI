@@ -1,0 +1,6 @@
+node_modules/
+.env
+sql_errors.txt
+sql_errors2.txt
+.DS_Store
+*.log

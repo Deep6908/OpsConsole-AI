@@ -1,0 +1,95 @@
+version: '3.9'
+
+# =============================================================================
+# IT Helpdesk — Docker Compose
+# =============================================================================
+# Usage:
+#   docker compose up -d
+#
+# Required: copy .env.example → .env and fill in your MSSQL_* + JWT_SECRET etc.
+#
+# NOTE: Microsoft SQL Server is NOT containerised by default due to licensing.
+#       Set MSSQL_HOST in your .env to point at your Azure SQL / local SQL
+#       Server instance.
+#
+#       To run SQL Server locally in Docker, uncomment the `sqlserver` service
+#       below and set MSSQL_HOST=sqlserver in your .env.
+# =============================================================================
+
+services:
+
+  # ── Application ─────────────────────────────────────────────────────────────
+  app:
+    build: .
+    container_name: helpdesk-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+    depends_on:
+      mongo:
+        condition: service_healthy
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - helpdesk-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── MongoDB ──────────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    container_name: helpdesk-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - helpdesk-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── SQL Server 2022 Developer Edition (free for non-production use)
+  # By using this image you accept the Microsoft SQL Server EULA.
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: helpdesk-sqlserver
+    restart: unless-stopped
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${MSSQL_PASSWORD}"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - helpdesk-net
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd",
+             "-S", "localhost", "-U", "sa", "-P", "${MSSQL_PASSWORD}",
+             "-C", "-Q", "SELECT 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mongo-data:
+  sqlserver-data:
+
+networks:
+  helpdesk-net:
+    driver: bridge
