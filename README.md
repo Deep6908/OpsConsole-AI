@@ -530,11 +530,3 @@ Copilot_Studio_Project/
 ```
 
 ---
-
-## Security Notes
-
-- **Never commit `.env`** — it is in `.gitignore` by default.
-- The `/api/v1/auth/demo-token` endpoint **returns `404` in production** (`NODE_ENV=production`).
-- Use a dedicated service account JWT (not the demo token) for Copilot Studio HTTP Actions.
-- Enable `MSSQL_ENCRYPT=true` and `MSSQL_TRUST_SERVER_CERT=false` when connecting to Azure SQL.
-- The `Dockerfile` runs as a **non-root user** (`appuser`) for container security.
