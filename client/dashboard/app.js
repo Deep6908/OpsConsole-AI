@@ -521,7 +521,6 @@ document.querySelectorAll('.nav-item').forEach((item) => {
 
 // ── Login form events ──────────────────────────────────────────────────────────
 
-
 document.getElementById('login-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const pw = document.getElementById('login-password').value;
@@ -529,6 +528,55 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
 });
 
 document.getElementById('logout-btn').addEventListener('click', logout);
+
+// ── AI Bot Simulator ───────────────────────────────────────────────────────────
+
+document.getElementById('btn-simulate-bot').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-simulate-bot');
+  if (!authToken) return toast('Please sign in first', 'error');
+  
+  btn.disabled = true;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;margin:0"></span> Simulating...';
+
+  const mockUsers = ['sarah.j', 'alex.w', 'michael.t', 'emma.r', 'david.k', 'lisa.m'];
+  const mockIssues = [
+    { type: 'PASSWORD_RESET', desc: 'I am locked out of my workstation, need a password reset.', priority: 'HIGH' },
+    { type: 'HARDWARE_ISSUE', desc: 'My external monitor is flickering and randomly shutting off.', priority: 'MEDIUM' },
+    { type: 'SOFTWARE_ACCESS', desc: 'Requesting access to Adobe Creative Cloud for my new project.', priority: 'LOW' },
+    { type: 'NETWORK_ISSUE', desc: 'VPN keeps dropping connection every 10 minutes from home.', priority: 'CRITICAL' },
+    { type: 'OTHER', desc: 'Need a replacement for my wireless mouse, the scroll wheel is broken.', priority: 'LOW' }
+  ];
+
+  const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
+  const randomIssue = mockIssues[Math.floor(Math.random() * mockIssues.length)];
+
+  try {
+    const res = await fetch(`${API_BASE}/tickets`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({
+        userId: randomUser,
+        issueType: randomIssue.type,
+        description: `[AI Generated] ${randomIssue.desc}`,
+        priority: randomIssue.priority
+      })
+    });
+
+    if (!res.ok) throw new Error('Failed to generate ticket');
+    
+    toast(`🤖 AI Bot created a new ${randomIssue.priority} ticket for ${randomUser}`, 'success');
+    await refresh(); // instantly update dashboard
+  } catch (err) {
+    toast(err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+});
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 

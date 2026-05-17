@@ -226,6 +226,90 @@
       color: var(--text-muted);
     }
 
+    .btn-simulate {
+      background: linear-gradient(135deg, rgba(99, 122, 255, 0.15), rgba(139, 111, 255, 0.15));
+      border: 1px solid rgba(139, 111, 255, 0.3);
+      border-radius: var(--radius-sm);
+      color: #cbbaff;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-simulate:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(99, 122, 255, 0.25), rgba(139, 111, 255, 0.25));
+      box-shadow: 0 0 15px rgba(139, 111, 255, 0.25);
+      border-color: rgba(139, 111, 255, 0.5);
+    }
+    
+    .btn-simulate:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-simulate {
+      background: linear-gradient(135deg, rgba(99, 122, 255, 0.15), rgba(139, 111, 255, 0.15));
+      border: 1px solid rgba(139, 111, 255, 0.3);
+      border-radius: var(--radius-sm);
+      color: #cbbaff;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-simulate:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(99, 122, 255, 0.25), rgba(139, 111, 255, 0.25));
+      box-shadow: 0 0 15px rgba(139, 111, 255, 0.25);
+      border-color: rgba(139, 111, 255, 0.5);
+    }
+    
+    .btn-simulate:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-simulate {
+      background: linear-gradient(135deg, rgba(99, 122, 255, 0.15), rgba(139, 111, 255, 0.15));
+      border: 1px solid rgba(139, 111, 255, 0.3);
+      border-radius: var(--radius-sm);
+      color: #cbbaff;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-simulate:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(99, 122, 255, 0.25), rgba(139, 111, 255, 0.25));
+      box-shadow: 0 0 15px rgba(139, 111, 255, 0.25);
+      border-color: rgba(139, 111, 255, 0.5);
+    }
+    
+    .btn-simulate:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .btn-refresh-head {
       background: rgba(99, 122, 255, 0.12);
       border: 1px solid rgba(99, 122, 255, 0.25);
@@ -267,7 +351,8 @@
       padding: 28px;
       overflow-y: auto;
       overflow-x: hidden;
-      min-width: 0; /* Prevents grid blowout */
+      min-width: 0;
+      /* Prevents grid blowout */
     }
 
     /* ── Metric Cards ── */
@@ -430,7 +515,8 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow-x: auto; /* Ensure horizontal scroll for table */
+      overflow-x: auto;
+      /* Ensure horizontal scroll for table */
       min-width: 0;
     }
 
@@ -1055,19 +1141,36 @@
       background: rgba(0, 0, 0, 0.6);
       z-index: 99;
     }
-    .sidebar-backdrop.open { display: block; }
+
+    .sidebar-backdrop.open {
+      display: block;
+    }
 
     /* ── Tablet (≤1100px) ── */
     @media (max-width: 1100px) {
-      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-      .charts-row   { grid-template-columns: 1fr; }
-      .td-desc      { display: none; }
-      th:nth-child(4), td:nth-child(4) { display: none; }
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .charts-row {
+        grid-template-columns: 1fr;
+      }
+
+      .td-desc {
+        display: none;
+      }
+
+      th:nth-child(4),
+      td:nth-child(4) {
+        display: none;
+      }
     }
 
     /* ── Mobile (≤768px) ── */
     @media (max-width: 768px) {
-      :root { --sidebar-w: 0px; }
+      :root {
+        --sidebar-w: 0px;
+      }
 
       /* Layout becomes single-column */
       .layout {
@@ -1087,18 +1190,39 @@
         grid-row: unset;
         border-right: 1px solid var(--border-glow);
       }
-      .sidebar.open { left: 0; }
 
-      header { grid-column: 1; padding: 0 16px; }
+      .sidebar.open {
+        left: 0;
+      }
 
-      .btn-hamburger { display: block; }
-      .header-title span { display: none; }
+      header {
+        grid-column: 1;
+        padding: 0 16px;
+      }
+
+      .btn-hamburger {
+        display: block;
+      }
+
+      .header-title span {
+        display: none;
+      }
 
       /* Hide refresh button text on mobile */
-      #btn-manual-refresh { padding: 6px 10px; font-size: 11px; }
-      #logout-btn { padding: 6px 10px; font-size: 11px; }
+      #btn-manual-refresh {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
 
-      main { grid-column: 1; padding: 16px; }
+      #logout-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+
+      main {
+        grid-column: 1;
+        padding: 16px;
+      }
 
       /* Metric cards 2-col on mobile */
       .metrics-grid {
@@ -1106,37 +1230,86 @@
         gap: 10px;
         margin-bottom: 16px;
       }
-      .metric-value { font-size: 32px; }
+
+      .metric-value {
+        font-size: 32px;
+      }
 
       /* Charts single col */
-      .charts-row { grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
+      .charts-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
 
       /* Table: hide non-essential columns, horizontal scroll */
-      .table-section { overflow-x: auto; }
-      table { min-width: 480px; }
-      th:nth-child(3), td:nth-child(3),
-      th:nth-child(4), td:nth-child(4),
-      th:nth-child(7), td:nth-child(7) { display: none; }
+      .table-section {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 480px;
+      }
+
+      th:nth-child(3),
+      td:nth-child(3),
+      th:nth-child(4),
+      td:nth-child(4),
+      th:nth-child(7),
+      td:nth-child(7) {
+        display: none;
+      }
 
       /* Toolbar wraps */
-      .table-head-bar { gap: 8px; padding: 12px; }
-      .search-input   { width: 140px; }
+      .table-head-bar {
+        gap: 8px;
+        padding: 12px;
+      }
+
+      .search-input {
+        width: 140px;
+      }
 
       /* Drawer full-width on mobile */
-      .drawer { width: 100%; right: -100%; }
-      .drawer.open { right: 0; }
+      .drawer {
+        width: 100%;
+        right: -100%;
+      }
+
+      .drawer.open {
+        right: 0;
+      }
 
       /* Login card padding */
-      .login-card { padding: 28px 20px; margin: 16px; }
+      .login-card {
+        padding: 28px 20px;
+        margin: 16px;
+      }
     }
 
     /* ── Small mobile (≤420px) ── */
     @media (max-width: 420px) {
-      .metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .metric-value { font-size: 28px; letter-spacing: -1px; }
-      .metric-card  { padding: 14px 14px; }
-      .header-right { gap: 6px; }
-      #btn-manual-refresh { display: none; }
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .metric-value {
+        font-size: 28px;
+        letter-spacing: -1px;
+      }
+
+      .metric-card {
+        padding: 14px 14px;
+      }
+
+      .header-right {
+        gap: 6px;
+      }
+
+      #btn-manual-refresh {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -1189,6 +1362,9 @@
         <span>IT Support Operations</span>
       </div>
       <div class="header-right">
+        <button class="btn-simulate" id="btn-simulate-bot">
+          <span style="font-size:14px">✨</span> Simulate AI Ticket
+        </button>
         <button class="btn-refresh-head" id="btn-manual-refresh">↻ Refresh Now</button>
         <button class="btn-logout" id="logout-btn">⎋ Logout</button>
       </div>
@@ -1196,7 +1372,7 @@
 
     <!-- Main Content -->
     <main>
-      <div id="auth-banner">⚠️ Could not obtain session token — ensure the server is running and JWT_SECRET is set.
+      <div id="auth-banner">Could not obtain session token — ensure the server is running and JWT_SECRET is set.
       </div>
 
       <!-- Metric Cards -->

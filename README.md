@@ -34,55 +34,25 @@ This system provides the backend infrastructure for an AI-powered IT helpdesk bo
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     USER (Employee)                             │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │ Chat
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│             Microsoft Copilot Studio Bot                        │
-│  (Topics, Triggers, Responses — configured manually)            │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │ HTTP Actions (REST API calls)
-                           │ JWT in Authorization header
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                  Express.js API  (:3000)                        │
-│                                                                 │
-│   ┌───────────────┐   ┌───────────────┐   ┌─────────────────┐  │
-│   │  /api/v1/     │   │  /api/v1/kb/  │   │  /webhooks/     │  │
-│   │  tickets      │   │  search       │   │  escalation     │  │
-│   │  (JWT auth)   │   │  (public)     │   │  (JWT auth)     │  │
-│   └───────┬───────┘   └───────┬───────┘   └────────┬────────┘  │
-│           │                   │                     │           │
-│   ┌───────▼───────────────────▼─────────────────────▼────────┐  │
-│   │               Business Logic Layer                        │  │
-│   │   ticketController  kbController  webhookController       │  │
-│   └──────────┬──────────────────────────────────┬────────────┘  │
-│              │                                  │               │
-└──────────────┼──────────────────────────────────┼───────────────┘
-               │                                  │
-       ┌───────▼───────┐                 ┌─────────▼──────────┐
-       │  SQL Server   │                 │     MongoDB         │
-       │  helpdesk_db  │                 │  helpdesk_logs      │
-       │               │                 │  conversation_logs  │
-       │  • tickets    │                 └────────────────────┘
-       │  • knowledge  │
-       │    _base      │                 ┌────────────────────┐
-       └───────────────┘                 │  SMTP (Nodemailer) │
-                                         │  Escalation emails │
-                                         └────────────────────┘
-                                         
-┌─────────────────────────────────────────────────────────────────┐
-│             Power Automate Flow                                 │
-│  Calls POST /webhooks/escalation with ticketId                  │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    User([User / Employee]) -->|Chat Interaction| Copilot[Microsoft Copilot Studio Bot]
+    Copilot -->|HTTP Webhook Action<br>JWT Auth| Express[Express.js API Node :3000]
+    
+    subgraph Express Backend
+        Express --> T[ticketController]
+        Express --> K[kbController]
+        Express --> W[webhookController]
+    end
 
-┌─────────────────────────────────────────────────────────────────┐
-│             Ops Dashboard  (/dashboard)                         │
-│  Static HTML + Vanilla JS — auto-refreshes every 30s           │
-└─────────────────────────────────────────────────────────────────┘
+    T --> SQL[(Microsoft SQL Server<br>helpdesk_db)]
+    K --> SQL
+    W --> Mongo[(MongoDB<br>conversation_logs)]
+    W --> Email[Nodemailer / SMTP]
+    
+    PowerAutomate[Power Automate Flow] -.->|Escalation Webhook| W
+    
+    Dashboard[Ops Dashboard<br>Static HTML + JS] <-->|REST API| Express
 ```
 
 ---
@@ -481,6 +451,7 @@ This endpoint is **public** — no JWT required:
 The ops dashboard is served at `/dashboard` as static HTML + vanilla JS.
 
 **Features:**
+- 🤖 **Built-in AI Simulator:** Contains a 'Simulate AI Ticket' button in the header that generates live, randomized POST requests representing webhook traffic from Copilot Studio (perfect for live interviews and demonstrations without needing the MS Power platform!).
 - 4 metric cards showing live counts per status
 - Filterable, paginated ticket table
 - Per-row **Resolve** button
